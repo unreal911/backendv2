@@ -5,13 +5,23 @@ const { validarCampos } = require("../middlewares/validar-campos");
 const router = Router()
 router.get('/tests', [], usuariotest)
 router.get('/:desde/:limite', [], listarUsuarios)
-router.post('/', [], crearUsuario)
-router.put('/:id', [], actualizarUsuario)
+router.post('/', [
+    check('nombre', 'el nombre es obligatorio').notEmpty(),
+    check('email', ' el email es requerido').notEmpty(),
+    check('password', 'El password es requerido').notEmpty()
+], crearUsuario)
+router.put('/:id', [
+
+], actualizarUsuario)
 router.put('/actualizarpass/:id', [
     check('passwordNuevo', 'se necesita el nuevo password').notEmpty(),
     check('passwordAnt', 'Se requiere el passord actual').notEmpty(),
     validarCampos
 ], actualizarpwd)
-router.put('/actualizarRol/:id', [], actualizarRol)
-router.put('/actualizarEstado/:id', [], actualizarEstado)
+router.put('/actualizarRol/:id', [
+
+], actualizarRol)
+router.put('/actualizarEstado/:id', [
+
+], actualizarEstado)
 module.exports = router
