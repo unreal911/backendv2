@@ -22,7 +22,7 @@ const UsuarioSchema = Schema({
     },
     telefono: {
         type: String,
-        default: ''
+        default: '121222'
     },
     rol: {
         type: String,
