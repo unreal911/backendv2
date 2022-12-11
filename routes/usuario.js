@@ -19,7 +19,8 @@ router.put('/actualizarpass/:id', [
     validarCampos
 ], actualizarpwd)
 router.put('/actualizarRol/:id', [
-
+    check('id', 'el id es requerido').notEmpty(),
+    check('rol', 'el rol es requerido').notEmpty()
 ], actualizarRol)
 router.put('/actualizarEstado/:id', [
 
