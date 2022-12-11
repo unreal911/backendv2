@@ -4,7 +4,7 @@ const { usuariotest, crearUsuario, actualizarUsuario, actualizarpwd, listarUsuar
 const { validarCampos } = require("../middlewares/validar-campos");
 const router = Router()
 router.get('/tests', [], usuariotest)
-router.get('/', [], listarUsuarios)
+router.get('/:desde/:limite', [], listarUsuarios)
 router.post('/', [], crearUsuario)
 router.put('/:id', [], actualizarUsuario)
 router.put('/actualizarpass/:id', [

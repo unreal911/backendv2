@@ -38,7 +38,6 @@ const subirArchivo = async (req = request, res = response) => {
         ok: true,
         msg: `estas en subit archivo`,
         modelo
-
     })
 }
 module.exports = {

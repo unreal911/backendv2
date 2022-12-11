@@ -3,13 +3,13 @@ const cors = require('cors');
 const { MongoConfig } = require('../database/config');
 const fileUpload = require('express-fileupload');
 class Server {
-
     constructor() {
         this.app = express();
         this.PORT = process.env.PORT
         this.rutas = {
             usuario: `/api/usuario`,
-            uploads: `/api/uploads`
+            uploads: `/api/uploads`,
+            auth: '/api/auth'
         }
         this.mongooseConfig()
         this.middlewares()
@@ -32,6 +32,7 @@ class Server {
     routes() {
         this.app.use(this.rutas.usuario, require('../routes/usuario'))
         this.app.use(this.rutas.uploads, require('../routes/subirArchivo'))
+        this.app.use(this.rutas.auth, require('../routes/auth'))
     }
     listen() {
         this.app.listen(this.PORT, () => { console.log(`estas en el puerto ${this.PORT}`) })
