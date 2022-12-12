@@ -1,14 +1,17 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { usuariotest, crearUsuario, actualizarUsuario, actualizarpwd, listarUsuarios, actualizarRol, actualizarEstado } = require("../controllers/usuario");
+const { existeModelo } = require("../helpers/validarModelo");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
-const { esAdminRol } = require("../middlewares/validar-rol");
+const { esAdminRol, validarAdminUsuario } = require("../middlewares/validar-rol");
+const Usuario = require("../models/usuario");
 const router = Router()
 router.get('/tests', [], usuariotest)
 router.get('/:desde/:limite', [], listarUsuarios)
 router.post('/', [
     validarJWT,
+    check('email').custom((email) => existeModelo(email, 'email', Usuario)),
     check('nombre', 'el nombre es obligatorio').notEmpty(),
     check('email', ' el email es requerido').notEmpty(),
     check('password', 'El password es requerido').notEmpty(),
@@ -16,12 +19,14 @@ router.post('/', [
 ], crearUsuario)
 router.put('/:id', [
     validarJWT,
+    validarAdminUsuario,
     check('id', 'el id es requerido').notEmpty(),
     check('id', 'el id debe ser valido').isMongoId(),
     validarCampos
 ], actualizarUsuario)
 router.put('/actualizarpass/:id', [
     validarJWT,
+    validarAdminUsuario,
     check('id', 'el id es requerido').notEmpty(),
     check('id', 'el id debe ser valido').isMongoId(),
     check('passwordNuevo', 'se necesita el nuevo password').notEmpty(),
@@ -30,6 +35,7 @@ router.put('/actualizarpass/:id', [
 ], actualizarpwd)
 router.put('/actualizarRol/:id', [
     validarJWT,
+    esAdminRol,
     check('id', 'el id es requerido').notEmpty(),
     check('id', 'el id debe ser valido').isMongoId(),
     check('rol', 'el rol es requerido').notEmpty(),

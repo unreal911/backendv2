@@ -28,6 +28,7 @@ const crearUsuario = async (req = request, res = response) => {
             msg: `el password esta en undefined`
         })
     }
+    
     const nuevoPassword = await generarpwd(password)
     nuevoBody.password = nuevoPassword
     const usuariodb = new Usuario(nuevoBody)
@@ -42,6 +43,7 @@ const actualizarUsuario = async (req = request, res = response) => {
     const { estado, password, ...nuevoBody } = req.body
     const { id } = req.params
     const usuariodb = await Usuario.findByIdAndUpdate(id, nuevoBody, { new: true })
+    console.log(id)
     if (!usuariodb) {
         return res.status(404).json({
             ok: false,
