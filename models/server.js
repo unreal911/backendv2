@@ -9,7 +9,8 @@ class Server {
         this.rutas = {
             usuario: `/api/usuario`,
             uploads: `/api/uploads`,
-            auth: '/api/auth'
+            auth: '/api/auth',
+            categoria: '/api/categoria'
         }
         this.mongooseConfig()
         this.middlewares()
@@ -33,6 +34,7 @@ class Server {
         this.app.use(this.rutas.usuario, require('../routes/usuario'))
         this.app.use(this.rutas.uploads, require('../routes/subirArchivo'))
         this.app.use(this.rutas.auth, require('../routes/auth'))
+        this.app.use(this.rutas.categoria, require('../routes/categoria'))
     }
     listen() {
         this.app.listen(this.PORT, () => { console.log(`estas en el puerto ${this.PORT}`) })
