@@ -13,7 +13,7 @@ router.post('/',
         check('nombre', 'el nombre es obligatorio').notEmpty(),
         check('nombre').custom((nombre) => existeModelo(nombre, 'nombre', producto)),
         check('categoria', 'la categoria es requerida').notEmpty(),
-        check('categoria').custom((categoria) => noexisteModelo(categoria, 'categoria', Categoria)),
+        check('categoria').custom((categoria) => noexisteModelo(categoria, 'categoria', Categoria)),//aca busca por id no lo toma como tal
         validarCampos
     ],
     crearProducto)

@@ -54,14 +54,14 @@ const eliminarPermanente = async (req = request, res = response) => {
 }
 const listarCategorias = async (req = request, res = response) => {
     const { limite = 5, desde = 0 } = req.params;
-    const [total, usuarios] = await Promise.all([
+    const [total, categorias] = await Promise.all([
         Categoria.countDocuments(),
         Categoria.find().skip(Number(desde)).limit(Number(limite)),
     ]);
 
     res.json({
         total,
-        usuarios,
+        categorias,
     });
 };
 module.exports = {
