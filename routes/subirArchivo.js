@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { subirTests, subirArchivo } = require("../controllers/subirArchivo");
+const { subirTests, subirArchivo, SubirMultiplesArchivos } = require("../controllers/subirArchivo");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
 const router = Router()
@@ -12,4 +12,9 @@ router.post('/:coleccion/:id', [
     check('id', ' el id debe ser valido').isMongoId(),
     validarCampos
 ], subirArchivo)
+router.post('/:id',
+    [
+        
+    ],
+    SubirMultiplesArchivos)
 module.exports = router

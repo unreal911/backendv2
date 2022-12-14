@@ -40,7 +40,28 @@ const subirArchivo = async (req = request, res = response) => {
         modelo
     })
 }
+ const SubirMultiplesArchivos = async (req = request, res = response) => {
+    const { id } = req.params;
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    }
+    const productodb = await Usuario.findById(id);
+    if (!productodb) {
+        return res.status(400).json({
+            msg: `No existe un usuario con el id ${id}`
+        });
+    }
+    const { tempFilePath } = req.files.img
+    const { secure_url, public_id } = await cloudinary.uploader.upload(tempFilePath, { folder: coleccion });
+    productodb.img = { secure_url, public_id };
+    productodb.save()
+    res.json({
+        ok: true,
+        msg: `estas en subit archivo`,
+    })
+}
 module.exports = {
     subirTests,
-    subirArchivo
+    subirArchivo,
+    SubirMultiplesArchivos
 }
