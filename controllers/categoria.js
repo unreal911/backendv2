@@ -36,8 +36,38 @@ const actualizarEstado = async (req = request, res = response) => {
         categoria: categoriadb
     })
 }
+const eliminarPermanente = async (req = request, res = response) => {
+    const { id } = req.params
+    const categoriadb = await Categoria.findByIdAndDelete(id)
+    if (!categoriadb) {
+        return res.status(404).json({
+            ok: false,
+            msg: `la categoria no existe`
+        })
+    }
+    return res.json({
+        ok: true,
+        msg: `se elimino categoria`,
+        categoria: categoriadb
+
+    })
+}
+const listarCategorias = async (req = request, res = response) => {
+    const { limite = 5, desde = 0 } = req.params;
+    const [total, usuarios] = await Promise.all([
+        Categoria.countDocuments(),
+        Categoria.find().skip(Number(desde)).limit(Number(limite)),
+    ]);
+
+    res.json({
+        total,
+        usuarios,
+    });
+};
 module.exports = {
     crearCategoria,
     actualizarCategoria,
-    actualizarEstado
+    actualizarEstado,
+    eliminarPermanente,
+    listarCategorias
 }

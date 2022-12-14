@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { crearCategoria, actualizarCategoria, actualizarEstado } = require("../controllers/categoria");
+const { crearCategoria, actualizarCategoria, actualizarEstado, eliminarPermanente, listarCategorias } = require("../controllers/categoria");
 const { existeModelo } = require("../helpers/validarModelo");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
@@ -25,4 +25,16 @@ router.put('/estado/:id', [
     validarCampos
 
 ], actualizarEstado)
+router.delete('/', [
+    validarJWT,
+    check('id', 'el id debe ser obligatorio').notEmpty(),
+    check('id', 'el id debe ser valido').isMongoId(),
+    validarCampos
+], eliminarPermanente)
+router.get('/listar/:desde/:limite',
+    [
+        validarJWT,
+        validarCampos
+    ],
+    listarCategorias)
 module.exports = router
