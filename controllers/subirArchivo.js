@@ -1,4 +1,5 @@
-const { request, response } = require("express")
+const { request, response } = require("express");
+const Producto = require("../models/producto");
 const Usuario = require("../models/usuario")
 const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL);
@@ -40,24 +41,37 @@ const subirArchivo = async (req = request, res = response) => {
         modelo
     })
 }
- const SubirMultiplesArchivos = async (req = request, res = response) => {
+const SubirMultiplesArchivos = async (req = request, res = response) => {
     const { id } = req.params;
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
     }
-    const productodb = await Usuario.findById(id);
+    const productodb = await Producto.findById(id);
     if (!productodb) {
         return res.status(400).json({
-            msg: `No existe un usuario con el id ${id}`
+            msg: `No existe un producto con el id ${id}`
         });
     }
-    const { tempFilePath } = req.files.img
-    const { secure_url, public_id } = await cloudinary.uploader.upload(tempFilePath, { folder: coleccion });
-    productodb.img = { secure_url, public_id };
-    productodb.save()
+    //tempFilePath
+    const archivo = req.files.img
+    for (let i = 0; i < archivo.length; i++) {
+        const { secure_url, public_id } = await cloudinary.uploader.upload(archivo[i].tempFilePath, { folder: 'usuarios' });
+
+        const updateProducto = await Producto.findByIdAndUpdate(id, {
+            $push: {
+                img: {
+                    id: public_id,
+                    url: secure_url
+                }
+            }
+        }, { new: true })
+    }
+    
     res.json({
         ok: true,
         msg: `estas en subit archivo`,
+        productodb
+        // producto: productodb
     })
 }
 module.exports = {
