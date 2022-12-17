@@ -72,10 +72,25 @@ const listarProductos = async (req = request, res = response) => {
         usuarios,
     });
 };
+const productoxid = async (req = request, res = response) => {
+    const { id } = req.params
+    const productodb = await Producto.findById(id)
+    if (!productodb) {
+        return res.status(404).json({
+            ok: false,
+            msg: `no se encontro producto`
+        })
+    }
+    return res.json({
+        ok: true,
+        producto: productodb
+    })
+}
 module.exports = {
     crearProducto,
     editarProducto,
     productoDisponible,
     eliminarPermanente,
-    listarProductos
+    listarProductos,
+    productoxid
 }

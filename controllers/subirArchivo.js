@@ -23,8 +23,14 @@ const subirArchivo = async (req = request, res = response) => {
                     msg: `No existe un usuario con el id ${id}`
                 });
             }
-
             break;
+        case 'productos':
+            modelo = await Producto.findById(id)
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id ${id}`
+                });
+            }
         default:
             return res.status(500).json({ msg: 'Se me olvidó validar esto' });
     }
@@ -54,9 +60,29 @@ const SubirMultiplesArchivos = async (req = request, res = response) => {
     }
     //tempFilePath
     const archivo = req.files.img
-    for (let i = 0; i < archivo.length; i++) {
-        const { secure_url, public_id } = await cloudinary.uploader.upload(archivo[i].tempFilePath, { folder: 'usuarios' });
+    if (archivo.length) {
+        let updateProducto
+        for (let i = 0; i < archivo.length; i++) {
+            const { secure_url, public_id } = await cloudinary.uploader.upload(archivo[i].tempFilePath, { folder: 'productos' });
 
+            updateProducto = await Producto.findByIdAndUpdate(id, {
+                $push: {
+                    img: {
+                        id: public_id,
+                        url: secure_url
+                    }
+                }
+            }, { new: true })
+        }
+        return res.json({
+            ok: true,
+            msg: `se actualizo productos correctamente`,
+            producto: updateProducto
+        })
+
+//probar este codigo en postman
+    } else {
+        const { secure_url, public_id } = await cloudinary.uploader.upload(archivo.tempFilePath, { folder: 'producto' });
         const updateProducto = await Producto.findByIdAndUpdate(id, {
             $push: {
                 img: {
@@ -65,17 +91,35 @@ const SubirMultiplesArchivos = async (req = request, res = response) => {
                 }
             }
         }, { new: true })
+        return res.json({
+            ok: true,
+            msg: `se subio imagen correctamente`,
+            producto: updateProducto
+        })
     }
-    
-    res.json({
+
+
+}
+const eliminarimagen = async (req = request, res = response) => {
+    const { id } = req.params
+    const { imgId } = req.body
+    const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: imgId } })
+    await cloudinary.uploader.destroy(imgId, (err, result) => {
+        if (err) {
+            console.log('hubo un error', err)
+        } else {
+            console.log('imagen eliminada')
+        }
+    })
+    return res.json({
         ok: true,
-        msg: `estas en subit archivo`,
+        msg: `se elimino imagen correctamente`,
         productodb
-        // producto: productodb
     })
 }
 module.exports = {
     subirTests,
     subirArchivo,
-    SubirMultiplesArchivos
+    SubirMultiplesArchivos,
+    eliminarimagen
 }
