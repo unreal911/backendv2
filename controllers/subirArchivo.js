@@ -80,7 +80,7 @@ const SubirMultiplesArchivos = async (req = request, res = response) => {
             producto: updateProducto
         })
 
-//probar este codigo en postman
+        //probar este codigo en postman
     } else {
         const { secure_url, public_id } = await cloudinary.uploader.upload(archivo.tempFilePath, { folder: 'producto' });
         const updateProducto = await Producto.findByIdAndUpdate(id, {
@@ -102,9 +102,10 @@ const SubirMultiplesArchivos = async (req = request, res = response) => {
 }
 const eliminarimagen = async (req = request, res = response) => {
     const { id } = req.params
-    const { imgId } = req.body
-    const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: imgId } })
-    await cloudinary.uploader.destroy(imgId, (err, result) => {
+    const {img}=req.body
+    console.log(img,id)
+    const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: {id:img} } }, { new: true })
+    await cloudinary.uploader.destroy(img, (err, result) => {
         if (err) {
             console.log('hubo un error', err)
         } else {

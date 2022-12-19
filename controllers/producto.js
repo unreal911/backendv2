@@ -62,14 +62,14 @@ const eliminarPermanente = async (req = request, res = response) => {
 }
 const listarProductos = async (req = request, res = response) => {
     const { limite = 5, desde = 0 } = req.params;
-    const [total, usuarios] = await Promise.all([
+    const [total, productos] = await Promise.all([
         Producto.countDocuments(),
         Producto.find().skip(Number(desde)).limit(Number(limite)),
     ]);
 
     res.json({
         total,
-        usuarios,
+        productos,
     });
 };
 const productoxid = async (req = request, res = response) => {
