@@ -1,6 +1,7 @@
 const { request, response } = require("express");
 const Producto = require("../models/producto");
 const Usuario = require("../models/usuario")
+const { ObjectId } = require('mongodb');
 const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL);
 const subirTests = (req = request, res = response) => {
@@ -102,9 +103,9 @@ const SubirMultiplesArchivos = async (req = request, res = response) => {
 }
 const eliminarimagen = async (req = request, res = response) => {
     const { id } = req.params
-    const {img}=req.body
-    console.log(img,id)
-    const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: {id:img} } }, { new: true })
+    const { img } = req.body
+    console.log(img, id)
+    const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: { id: img } } }, { new: true })
     await cloudinary.uploader.destroy(img, (err, result) => {
         if (err) {
             console.log('hubo un error', err)
@@ -118,9 +119,43 @@ const eliminarimagen = async (req = request, res = response) => {
         productodb
     })
 }
+const cambiarPosicion =  async(req = request, res = response) => {
+     // Obtiene el ID del producto y las posiciones a intercambiar de la solicitud
+     const { id } = req.params;
+     const { after, before } = req.body;
+  
+     // Convierte el ID a un objeto ObjectId de MongoDB
+     const objectId = ObjectId(id);
+  
+     // Obtiene el documento y guarda los elementos a intercambiar en variables temporales
+     Producto.findOne({ _id: objectId }, function(err, producto) {
+        if (err) {
+           res.status(500).send(err);
+        } else {
+           // Intercambia los elementos del array
+           const temp1 = producto.img[before];
+           const temp2 = producto.img[after];
+           producto.img[before] = temp2;
+           producto.img[after] = temp1;
+  
+           // Actualiza el documento
+           Producto.findOneAndUpdate({ _id: objectId }, {
+              $set: { img: producto.img }
+           }, function(err, result) {
+              if (err) {
+                 res.status(500).send(err);
+              } else {
+                 res.send({ message: 'Elementos intercambiados' });
+              }
+           });
+        }
+     });
+    //console.log(productodb)
+}
 module.exports = {
     subirTests,
     subirArchivo,
     SubirMultiplesArchivos,
-    eliminarimagen
+    eliminarimagen,
+    cambiarPosicion
 }

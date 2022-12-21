@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { subirTests, subirArchivo, SubirMultiplesArchivos, eliminarimagen } = require("../controllers/subirArchivo");
+const { subirTests, subirArchivo, SubirMultiplesArchivos, eliminarimagen, cambiarPosicion } = require("../controllers/subirArchivo");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
 const router = Router()
@@ -14,8 +14,9 @@ router.post('/:coleccion/:id', [
 ], subirArchivo)
 router.post('/:id',
     [
-        
+
     ],
     SubirMultiplesArchivos)
-router.delete('/:id',[],eliminarimagen)
+router.delete('/:id', [], eliminarimagen)
+router.put('/:id', [], cambiarPosicion)
 module.exports = router
