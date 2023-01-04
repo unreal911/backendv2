@@ -23,6 +23,7 @@ router.put('/:id',
     [
         validarJWT,
         validarAdminUsuario,
+        check('email').custom((email) => existeModelo(email, 'email', Usuario)),
         check('id', 'el id es requerido').notEmpty(),
         check('id', 'el id debe ser valido').isMongoId(),
         validarCampos
