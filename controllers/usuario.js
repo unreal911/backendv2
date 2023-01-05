@@ -114,6 +114,20 @@ const actualizarEstado = async (req = request, res = response) => {
         result: usuariodb
     })
 }
+const eliminarUsuario= async(req=request,res=response)=>{
+    const {id}=req.params
+    const usuariodb= await Usuario.findByIdAndDelete(id)
+    if(!usuariodb){
+        return res.status(404).json({
+            ok:false,
+            msg:`No se encontro el usuario`
+        })
+    }
+    return res.json({
+        ok:true,
+        msg:`Se elimino usuario correctamente`
+    })
+}
 module.exports = {
     usuariotest,
     crearUsuario,
@@ -121,5 +135,6 @@ module.exports = {
     actualizarpwd,
     listarUsuarios,
     actualizarRol,
-    actualizarEstado
+    actualizarEstado,
+    eliminarUsuario
 }

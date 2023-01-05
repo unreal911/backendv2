@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { usuariotest, crearUsuario, actualizarUsuario, actualizarpwd, listarUsuarios, actualizarRol, actualizarEstado } = require("../controllers/usuario");
+const { usuariotest, crearUsuario, actualizarUsuario, actualizarpwd, listarUsuarios, actualizarRol, actualizarEstado, eliminarUsuario } = require("../controllers/usuario");
 const { existeModelo } = require("../helpers/validarModelo");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
@@ -52,6 +52,7 @@ router.put('/actualizarRol/:id',
             "USER_ROL",
             "DEV_ROL",
         ]),
+        validarCampos
     ]
     , actualizarRol)
 router.put('/actualizarEstado/:id',
@@ -60,7 +61,18 @@ router.put('/actualizarEstado/:id',
         esAdminRol,
         check('id', 'el id es requerido').notEmpty(),
         check('id', 'el id debe ser valido').isMongoId(),
-        check('id', 'el estado es requerido').notEmpty()
+        check('id', 'el estado es requerido').notEmpty(),
+        validarCampos
     ],
     actualizarEstado)
+router.delete('/:id',
+    [
+        validarJWT,
+        esAdminRol,
+        check('id', 'el id es obligatorio').notEmpty(),
+        check('id', 'el id debe ser valido').isMongoId(),
+        validarCampos
+    ],
+    eliminarUsuario
+)
 module.exports = router
