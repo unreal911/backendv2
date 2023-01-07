@@ -1,22 +1,22 @@
 const { response } = require("express");
 const Usuario = require("../models/usuario");
-const Categoria = require("../models/categoria");
 const Producto = require("../models/producto");
+const Categoria = require("../models/categoria");
 const getTodo = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, "i");
 
-    const [usuarios] = await Promise.all([
+    const [usuarios, categorias, productos] = await Promise.all([
         Usuario.find({ nombre: regex }),
-        /*  Medico.find({ nombre: regex }),
-            Hospital.find({ nombre: regex }),*/
+        Categoria.find({ nombre: regex }),
+        Producto.find({ nombre: regex }),
     ]);
 
     res.json({
         ok: true,
         usuarios,
-        /*   medicos,
-            hospitales*/
+        categorias,
+        productos
     });
 };
 
