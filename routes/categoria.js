@@ -31,7 +31,7 @@ router.put('/estado/:id',
 
     ],
     actualizarEstado)
-router.delete('/',
+router.delete('/:id',
     [
         validarJWT,
         check('id', 'el id debe ser obligatorio').notEmpty(),

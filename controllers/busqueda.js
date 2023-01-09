@@ -31,7 +31,6 @@ const getDocumentosColeccion = async (req, res = response) => {
         case "categorias":
             data = await Categoria.find({ nombre: regex })
                 .populate("usuario", "nombre img")
-                .populate("hospital", "nombre img");
             break;
 
         case "productos":

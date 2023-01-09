@@ -8,11 +8,10 @@ const crearCategoria = async (req = request, res = response) => {
     const categoriadb = new Categoria(nuevaCategoria)
     await categoriadb.save()
     return res.json({
-        ok: false,
+        ok: true,
         msg: `se creo la categoria correctamente`,
         categoria: categoriadb
     })
-
 }
 const actualizarCategoria = async (req = request, res = response) => {
     const { id } = req.params
@@ -49,7 +48,6 @@ const eliminarPermanente = async (req = request, res = response) => {
         ok: true,
         msg: `se elimino categoria`,
         categoria: categoriadb
-
     })
 }
 const listarCategorias = async (req = request, res = response) => {
@@ -58,7 +56,6 @@ const listarCategorias = async (req = request, res = response) => {
         Categoria.countDocuments(),
         Categoria.find().skip(Number(desde)).limit(Number(limite)),
     ]);
-
     res.json({
         total,
         categorias,
