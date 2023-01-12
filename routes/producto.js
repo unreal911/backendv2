@@ -20,10 +20,9 @@ router.post('/',
 router.put('/:id',
     [
         validarJWT,
-        check('nombre', 'el nombre es obligatorio').notEmpty(),
         check('nombre').custom((nombre) => existeModelo(nombre, 'nombre', producto)),
         check('categoria', 'la categoria es requerida').notEmpty(),
-        check('categoria').custom((categoria) => noexisteModelo(categoria, 'categoria', Categoria)),
+        check('categoria').custom((categoria) => existeidModelo(categoria, Categoria)),
         validarCampos
     ],
     editarProducto
@@ -37,7 +36,7 @@ router.put('/disponible/:id',
         validarCampos
     ],
     productoDisponible)
-router.delete('/',
+router.delete('/:id',
     [
         validarJWT,
         check('id', 'el es requerido').notEmpty(),
