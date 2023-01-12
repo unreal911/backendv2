@@ -12,6 +12,7 @@ const subirTests = (req = request, res = response) => {
 }
 const subirArchivo = async (req = request, res = response) => {
     const { id, coleccion } = req.params;
+    console.log(coleccion)
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
     }
@@ -32,6 +33,7 @@ const subirArchivo = async (req = request, res = response) => {
                     msg: `No existe un usuario con el id ${id}`
                 });
             }
+            break;
         default:
             return res.status(500).json({ msg: 'Se me olvidó validar esto' });
     }
@@ -119,37 +121,37 @@ const eliminarimagen = async (req = request, res = response) => {
         productodb
     })
 }
-const cambiarPosicion =  async(req = request, res = response) => {
-     // Obtiene el ID del producto y las posiciones a intercambiar de la solicitud
-     const { id } = req.params;
-     const { after, before } = req.body;
-  
-     // Convierte el ID a un objeto ObjectId de MongoDB
-     const objectId = ObjectId(id);
-  
-     // Obtiene el documento y guarda los elementos a intercambiar en variables temporales
-     Producto.findOne({ _id: objectId }, function(err, producto) {
+const cambiarPosicion = async (req = request, res = response) => {
+    // Obtiene el ID del producto y las posiciones a intercambiar de la solicitud
+    const { id } = req.params;
+    const { after, before } = req.body;
+
+    // Convierte el ID a un objeto ObjectId de MongoDB
+    const objectId = ObjectId(id);
+
+    // Obtiene el documento y guarda los elementos a intercambiar en variables temporales
+    Producto.findOne({ _id: objectId }, function (err, producto) {
         if (err) {
-           res.status(500).send(err);
+            res.status(500).send(err);
         } else {
-           // Intercambia los elementos del array
-           const temp1 = producto.img[before];
-           const temp2 = producto.img[after];
-           producto.img[before] = temp2;
-           producto.img[after] = temp1;
-  
-           // Actualiza el documento
-           Producto.findOneAndUpdate({ _id: objectId }, {
-              $set: { img: producto.img }
-           }, function(err, result) {
-              if (err) {
-                 res.status(500).send(err);
-              } else {
-                 res.send({ message: 'Elementos intercambiados' });
-              }
-           });
+            // Intercambia los elementos del array
+            const temp1 = producto.img[before];
+            const temp2 = producto.img[after];
+            producto.img[before] = temp2;
+            producto.img[after] = temp1;
+
+            // Actualiza el documento
+            Producto.findOneAndUpdate({ _id: objectId }, {
+                $set: { img: producto.img }
+            }, function (err, result) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.send({ message: 'Elementos intercambiados' });
+                }
+            });
         }
-     });
+    });
     //console.log(productodb)
 }
 module.exports = {
