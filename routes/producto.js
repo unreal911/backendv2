@@ -50,6 +50,13 @@ router.get('/listar/:desde/:limite',
         validarCampos
     ],
     listarProductos)
+router.get('/listarPublico/:desde/:limite',
+    [
+        check('desde', 'el campo desde es obligatorio').notEmpty(),
+        check('limite', 'el campo limite es obligatorio').notEmpty(),
+        validarCampos
+    ],
+    listarProductos)
 router.get('/id/:id', [],
     productoxid)
 module.exports = router
