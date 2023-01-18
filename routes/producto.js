@@ -5,7 +5,7 @@ const { validarJWT } = require("../middlewares/validar-jwt");
 const producto = require("../models/producto");
 const Categoria = require("../models/categoria");
 const { validarCampos } = require("../middlewares/validar-campos");
-const { crearProducto, editarProducto, productoDisponible, eliminarPermanente, listarProductos, productoxid } = require("../controllers/producto");
+const { crearProducto, editarProducto, productoDisponible, eliminarPermanente, listarProductos, productoxid, listarProductosPublic } = require("../controllers/producto");
 const router = Router()
 router.post('/',
     [
@@ -56,7 +56,11 @@ router.get('/listarPublico/:desde/:limite',
         check('limite', 'el campo limite es obligatorio').notEmpty(),
         validarCampos
     ],
-    listarProductos)
-router.get('/id/:id', [],
+    listarProductosPublic)
+router.get('/id/:id', [
+    check('id', 'El id es obligatorio').notEmpty(),
+    check('id', 'El id debe tener el formato correcto').notEmpty(),
+    validarCampos
+],
     productoxid)
 module.exports = router

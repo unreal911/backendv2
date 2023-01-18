@@ -50,7 +50,6 @@ router.get('/listarPublico/:desde/:limite',
     [
         check('desde', 'el campo desde es obligatorio').notEmpty(),
         check('limite', 'el campo limite es obligatorio').notEmpty(),
-        validarJWT,
         validarCampos
     ],
     listarCategorias)

@@ -72,6 +72,19 @@ const listarProductos = async (req = request, res = response) => {
         productos,
     });
 };
+
+const listarProductosPublic = async (req = request, res = response) => {
+    const { limite = 5, desde = 0 } = req.params;
+    const [total, productos] = await Promise.all([
+        Producto.countDocuments(),
+        Producto.find({ estado: true }).skip(Number(desde)).limit(Number(limite)),
+    ]);
+
+    res.json({
+        total,
+        productos,
+    });
+};
 const productoxid = async (req = request, res = response) => {
     const { id } = req.params
     const productodb = await Producto.findById(id)
@@ -92,5 +105,6 @@ module.exports = {
     productoDisponible,
     eliminarPermanente,
     listarProductos,
-    productoxid
+    productoxid,
+    listarProductosPublic
 }

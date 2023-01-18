@@ -12,7 +12,8 @@ class Server {
             auth: '/api/auth',
             categoria: '/api/categoria',
             producto: '/api/producto',
-            busqueda: '/api/busqueda'
+            busqueda: '/api/busqueda',
+            talla:'/api/talla'
         }
         this.mongooseConfig()
         this.middlewares()
@@ -39,6 +40,7 @@ class Server {
         this.app.use(this.rutas.categoria, require('../routes/categoria'))
         this.app.use(this.rutas.producto, require('../routes/producto'))
         this.app.use(this.rutas.busqueda, require('../routes/busquedas'))
+        this.app.use(this.rutas.talla, require('../routes/talla'))
     }
     listen() {
         this.app.listen(this.PORT, () => { console.log(`estas en el puerto ${this.PORT}`) })
