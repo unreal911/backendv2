@@ -24,8 +24,13 @@ const ProductoSchema = Schema({
     ref: "Categoria",
     required: true,
   },
+  talla: {
+    type: Array,
+    default: []
+
+  },
   descripcion: { type: String, default: 'Sin descripcion' },
-  disponible: { type: Boolean, defult: true,required:true },
+  disponible: { type: Boolean, defult: true, required: true },
   img: {
     type: Array,
     default: [],
