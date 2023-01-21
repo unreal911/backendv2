@@ -3,6 +3,7 @@ const Usuario = require("../models/usuario");
 const Producto = require("../models/producto");
 const Categoria = require("../models/categoria");
 const talla = require("../models/talla");
+const pedido = require("../models/pedido");
 const getTodo = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, "i");
@@ -49,11 +50,15 @@ const getDocumentosColeccion = async (req, res = response) => {
             data = await talla.find({ codigo: regex });
 
             break;
+        case "pedidos":
+            data = await pedido.find({ nombre: regex });
+
+            break;
 
         default:
             return res.status(400).json({
                 ok: false,
-                msg: "La tabla tiene que ser usuarios/categorias/productos",
+                msg: "La tabla tiene que ser usuarios/categorias/productos/pedidos",
             });
     }
 
