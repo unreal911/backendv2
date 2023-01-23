@@ -24,9 +24,11 @@ router.put('/:id',
     ],
     editarDetallePedido
 )
-router.get('/listar/:desde/:limite',
+router.get('/listar/:pedido/:desde/:limite',
     [
         validarJWT,
+        check('pedido', 'el id es obligatorio').notEmpty(),
+        check('pedido', 'el id debe ser valido').isMongoId(),
         validarCampos
     ],
     listarDetallePedidos)

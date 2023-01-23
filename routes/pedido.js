@@ -12,6 +12,7 @@ router.post('/',
         check('nombre', 'el nombre es obligatorio').notEmpty(),
         check('departamento', 'el nombre es obligatorio').notEmpty(),
         check('direccion', 'la direccion es obligatoria').notEmpty(),
+        check('correo', 'el correo es obligatoria').notEmpty(),
         validarCampos
     ],
     crearPedido)
@@ -44,7 +45,7 @@ router.put('/estado/:id',
         validarJWT,
         check('id', 'el id no debe de estar vacio').notEmpty(),
         check('id', 'el id debe ser valido').isMongoId(),
-        check('estado', 'el id no debe de estar vacio').notEmpty(),
+        check('estado', 'el estado no debe de estar vacio').notEmpty(),
         validarCampos
     ],
     editarEstadoPedido

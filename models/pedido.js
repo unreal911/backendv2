@@ -31,6 +31,10 @@ const pedidoSchema = Schema({
         type: String,
         default: 'SoloPedido'
     },
+    correo: {
+        type: String,
+        default: 'Sin correo'
+    },
     pagado: {
         type: Boolean,
         default: false

@@ -6,6 +6,11 @@ const DetallePedidoSchema = Schema({
         ref: 'Pedido',
         required: true,
     },
+    nombre:{
+        type:String,
+        required:true,
+        default:''
+    },
     producto: {
         type: Schema.Types.ObjectId,
         ref: 'Producto',
