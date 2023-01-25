@@ -19,7 +19,6 @@ router.put('/:id',
         check('id', 'el id es obligatorio').notEmpty(),
         check('id', 'el id debe ser valido').isMongoId(),
         check('pedido', 'el id debe ser valido').isMongoId(),
-        check('pedido', 'el id debe ser valido').isMongoId(),
         validarCampos
     ],
     editarDetallePedido

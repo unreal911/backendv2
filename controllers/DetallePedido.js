@@ -3,7 +3,7 @@ const DetallePedido = require("../models/DetallePedido");
 const Producto = require("../models/producto");
 
 const crearDetallePedido = async (req = request, res = response) => {
-    const { estado, precio, ...nuevoBody } = req.body
+    const { estado, precio, subtotal, ...nuevoBody } = req.body
     const producto = await Producto.findById(nuevoBody.producto)
     nuevoBody.precio = producto.precio
     nuevoBody.subtotal = producto.precio * nuevoBody.cantidad
@@ -18,6 +18,18 @@ const crearDetallePedido = async (req = request, res = response) => {
 }
 const editarDetallePedido = async (req = request, res = response) => {
     const { id } = req.params
+    if (req.body.producto) {
+        const producto = await Producto.findById(req.body.producto)
+        req.body.nombre = producto.nombre
+    }
+    if (req.body.precio) {
+        const buscarPedido = await DetallePedido.findById(id)
+        req.body.subtotal = buscarPedido.cantidad * req.body.precio
+    }
+    if (req.body.cantidad) {
+        const buscarPedido = await DetallePedido.findById(id)
+        req.body.subtotal = buscarPedido.precio * req.body.cantidad
+    }
     const Dpedido = await DetallePedido.findByIdAndUpdate(id, req.body, { new: true })
     if (!Dpedido) {
         return res.status(404).json({
