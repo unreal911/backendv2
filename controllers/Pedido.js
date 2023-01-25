@@ -17,7 +17,7 @@ const editarPedido = async (req = request, res = response) => {
     if (!pedido) {
         return res.status(404).json({
             ok: false,
-            msg: `pedido no encontrado`
+            msg: `pedido no encontrado edit`
         })
     }
     return res.json({

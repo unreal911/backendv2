@@ -43,6 +43,10 @@ const pedidoSchema = Schema({
         type: Number,
         default: 0
     },
+    tipoventa:{
+        type:String,
+        default:'SinDefinir',
+    },
     adicionnales: {
         type: String,
         default: ''

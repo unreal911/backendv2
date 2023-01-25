@@ -22,7 +22,7 @@ const editarDetallePedido = async (req = request, res = response) => {
     if (!Dpedido) {
         return res.status(404).json({
             ok: false,
-            msg: `pedido no encontrado`
+            msg: `DetallePedido no encontrado`
         })
     }
     return res.json({

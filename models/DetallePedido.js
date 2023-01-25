@@ -6,20 +6,24 @@ const DetallePedidoSchema = Schema({
         ref: 'Pedido',
         required: true,
     },
-    nombre:{
-        type:String,
-        required:true,
-        default:''
+    nombre: {
+        type: String,
+        required: true,
+        default: ''
     },
     producto: {
         type: Schema.Types.ObjectId,
         ref: 'Producto',
         required: true,
     },
-    talla:{
-        type:String,
-        default:'M',
-        required:true
+    color: {
+        type: String,
+        default: 'SinColor'
+    },
+    talla: {
+        type: String,
+        default: 'M',
+        required: true
     },
     precio: {
         type: Number,
