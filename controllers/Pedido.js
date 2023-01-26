@@ -1,6 +1,7 @@
 const { response, request } = require("express");
+const DetallePedido = require("../models/DetallePedido");
 const Pedido = require("../models/pedido");
-
+const { ObjectId } = require('mongoose').Types;
 const crearPedido = async (req = request, res = response) => {
     const { estado, ...nuevoBody } = req.body
     const pedido = new Pedido(nuevoBody)
@@ -45,17 +46,20 @@ const editarEstadoPedido = async (req = request, res = response) => {
 }
 const eliminarPedido = async (req = request, res = response) => {
     const { id } = req.params
-    const pedido = await Pedido.findOneAndDelete(id)
+    const pedido = await Pedido.findByIdAndDelete(id)
     if (!pedido) {
         return res.status(404).json({
             ok: false,
-            msg: `pedido no encontrado`
+            msg: `pedido no encontrado`,
+
         })
     }
+    const eliminarDetallePedido = await DetallePedido.deleteMany({ pedido: new ObjectId(id) })
     return res.json({
         ok: true,
         msg: `pedido Eliminado`,
-        pedido
+        pedido,
+        eliminarDetallePedido
     })
 }
 const listarPedidos = async (req = request, res = response) => {
