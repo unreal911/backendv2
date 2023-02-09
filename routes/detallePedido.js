@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { crearDetallePedido, listarDetallePedidos, editarDetallePedido, eliminarDetallePedido } = require("../controllers/DetallePedido");
+const { crearDetallePedido, listarDetallePedidos, editarDetallePedido, eliminarDetallePedido, crearDetalleVenta } = require("../controllers/DetallePedido");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
 const router = Router()
@@ -13,6 +13,16 @@ router.post('/',
         validarCampos
     ],
     crearDetallePedido)
+
+router.post('/dventa',
+    [
+        check('pedido', 'el id pedido es obligatorio').notEmpty(),
+        check('pedido', 'el id debe ser valido').isMongoId(),
+        check('producto', 'el id pedido es obligatorio').notEmpty(),
+        check('producto', 'el id debe ser valido').isMongoId(),
+        validarCampos
+    ],
+    crearDetalleVenta)
 router.put('/:id',
     [
         validarJWT,

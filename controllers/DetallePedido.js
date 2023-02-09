@@ -16,6 +16,19 @@ const crearDetallePedido = async (req = request, res = response) => {
         Detallepedido: Dpedido
     })
 }
+const crearDetalleVenta = async (req = request, res = response) => {
+    const { estado, subtotal, ...nuevoBody } = req.body
+    nuevoBody.subtotal = nuevoBody.cantidad * nuevoBody.precio
+    const producto = await Producto.findById(nuevoBody.producto)
+    nuevoBody.nombre = producto.nombre
+    const Dpedido = new DetallePedido(nuevoBody)
+    await Dpedido.save()
+    return res.json({
+        ok: true,
+        msg: `Se creo el DetallePedidoVenta satisfactoriamente`,
+        Detallepedido: Dpedido
+    })
+}
 const editarDetallePedido = async (req = request, res = response) => {
     const { id } = req.params
     if (req.body.producto) {
@@ -76,5 +89,6 @@ module.exports = {
     crearDetallePedido,
     editarDetallePedido,
     eliminarDetallePedido,
-    listarDetallePedidos
+    listarDetallePedidos,
+    crearDetalleVenta
 }
