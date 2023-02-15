@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const Producto = require("../models/producto");
 const Usuario = require("../models/usuario")
 const { ObjectId } = require('mongodb');
+const Slider = require("../models/slider");
 const cloudinary = require('cloudinary').v2
 cloudinary.config(process.env.CLOUDINARY_URL);
 const subirTests = (req = request, res = response) => {
@@ -28,6 +29,14 @@ const subirArchivo = async (req = request, res = response) => {
             break;
         case 'productos':
             modelo = await Producto.findById(id)
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id ${id}`
+                });
+            }
+            break;
+        case 'slider':
+            modelo = await Slider.findById(id)
             if (!modelo) {
                 return res.status(400).json({
                     msg: `No existe un usuario con el id ${id}`
@@ -107,6 +116,7 @@ const eliminarimagen = async (req = request, res = response) => {
     const { id } = req.params
     const { img } = req.body
     console.log(img, id)
+
     const productodb = await Producto.findByIdAndUpdate(id, { $pull: { img: { id: img } } }, { new: true })
     await cloudinary.uploader.destroy(img, (err, result) => {
         if (err) {
@@ -115,10 +125,27 @@ const eliminarimagen = async (req = request, res = response) => {
             console.log('imagen eliminada')
         }
     })
+
+
     return res.json({
         ok: true,
         msg: `se elimino imagen correctamente`,
         productodb
+    })
+}
+const eliminarImagenSlider = async (req = request, res = response) => {
+    const { public_id } = req.body
+    await cloudinary.uploader.destroy(public_id, (err, result) => {
+        if (err) {
+            console.log('hubo un error', err)
+        } else {
+            console.log('imagen eliminada')
+        }
+    })
+
+    return res.json({
+        ok: true,
+        msg: `se elimino imagen correctamente/v2`,
     })
 }
 const cambiarPosicion = async (req = request, res = response) => {
@@ -159,5 +186,6 @@ module.exports = {
     subirArchivo,
     SubirMultiplesArchivos,
     eliminarimagen,
-    cambiarPosicion
+    cambiarPosicion,
+    eliminarImagenSlider
 }
