@@ -31,7 +31,8 @@ const editarPedido = async (req = request, res = response) => {
 const editarEstadoPedido = async (req = request, res = response) => {
     const { id } = req.params
     const { estado } = req.body
-    const pedido = await Pedido.findByIdAndUpdate(id, { estado: estado }, { new: true })
+    const { usuario } = req.body
+    const pedido = await Pedido.findByIdAndUpdate(id, { estado: estado,usuario:usuario }, { new: true })
     if (!pedido) {
         return res.status(404).json({
             ok: false,
@@ -93,8 +94,8 @@ const editarPagado = async (req = request, res = response) => {
 
     const { id } = req.params
     const { pagado } = req.body
-    console.log(pagado)
-    const pedido = await Pedido.findByIdAndUpdate(id, { pagado: pagado }, { new: true })
+    const { usuario } = req.body
+    const pedido = await Pedido.findByIdAndUpdate(id, { pagado: pagado,usuario:usuario }, { new: true })
     if (!pedido) {
         return res.status(404).json({
             ok: false,

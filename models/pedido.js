@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaType } = require('mongoose');
 
 const pedidoSchema = Schema({
     nombre: {
@@ -21,7 +21,7 @@ const pedidoSchema = Schema({
     },
     estado: {
         type: String,
-        default: 'Pendiente',
+        default: 'pendiente',
     },
     telefono: {
         type: String,
@@ -36,18 +36,22 @@ const pedidoSchema = Schema({
         default: 'Sin correo'
     },
     pagado: {
-        type: Boolean,
-        default: false
+        type: String,
+        default: 'PorProcesar'
     },
     Total: {
         type: Number,
-        default: 0
+        default: 0//Hacer una funcion
     },
-    tipoventa:{
-        type:String,
-        default:'SinDefinir',
+    tipoventa: {
+        type: String,
+        default: 'SinDefinir',
     },
     adicionnales: {
+        type: String,
+        default: ''
+    },
+    usuario: {
         type: String,
         default: ''
     }

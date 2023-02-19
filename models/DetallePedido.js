@@ -39,6 +39,10 @@ const DetallePedidoSchema = Schema({
         type: Number,
         default: 0,
         required: true
+    },
+    usuario:{
+        type:String,
+        default:''
     }
 });
 

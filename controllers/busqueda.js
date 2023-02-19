@@ -1,4 +1,4 @@
-const { response } = require("express");
+const { response, request } = require("express");
 const Usuario = require("../models/usuario");
 const Producto = require("../models/producto");
 const Categoria = require("../models/categoria");
@@ -113,9 +113,30 @@ const getProductoxCategoria = async (req, res = response) => {
         productos: productodb
     })
 }
+const getFiltro = async (req = request, res = response) => {
+    const filtro = req.body
+    if (filtro.tipoventa.$in.length == 0) {
+        delete filtro.tipoventa
+    }
+    if (filtro.pagado.$in.length == 0) {
+        delete filtro.pagado
+    }
+    if (filtro.fecha.$gte == '' && filtro.fecha.$lte == '') {
+        delete filtro.fecha
+    }
+    //  const pedido = await pedido.find()
+    console.log(filtro)
+    const filtrarPedido = await pedido.find(filtro)
+    return res.json(
+        {
+            filtrarPedido
+        }
+    )
+}
 module.exports = {
     getTodo,
     getDocumentosColeccion,
     getProductoxCategoria,
-    getProductoPublic
+    getProductoPublic,
+    getFiltro
 };
