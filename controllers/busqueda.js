@@ -133,10 +133,56 @@ const getFiltro = async (req = request, res = response) => {
         }
     )
 }
+const MostrarventaSemanaDia = async (req = request, res = response) => {
+    const { fechaInicio, fechaFin } = req.body;
+    let finfecha = new Date(fechaFin)
+    finfecha.setDate(finfecha.getDate() + 1)
+    const pipeline = [
+        {
+            $match: {
+                fecha: { $gte: new Date(fechaInicio), $lte: finfecha }
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    dia: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },
+                    tipoventa: "$tipoventa"
+                },
+                totalPedidos: { $sum: 1 }
+            }
+        },
+        {
+            $group: {
+                _id: "$_id.dia",
+                ventas: {
+                    $push: {
+                        tipoventa: "$_id.tipoventa",
+                        totalPedidos: "$totalPedidos"
+                    }
+                }
+            }
+        }
+    ];
+    const resultados = await pedido.aggregate(pipeline);
+    let arrayRespuesta = []
+    for (let i = 0; i < resultados.length; i++) {
+        const element = resultados[i];
+        arrayRespuesta.push({
+            fecha: resultados[i]._id,
+            ventas:resultados[i].ventas
+        })
+    }
+    console.log(arrayRespuesta)
+    return res.json({
+        resultados:arrayRespuesta
+    })
+}
 module.exports = {
     getTodo,
     getDocumentosColeccion,
     getProductoxCategoria,
     getProductoPublic,
-    getFiltro
+    getFiltro,
+    MostrarventaSemanaDia
 };
