@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
-mongoose.set('strictQuery', false);
+    mongoose.set('strictQuery', false);
+const options = {
+
+    // Establecer la zona horaria
+    driverOptions: { tzOffset: '-05:00' }
+};
+
 const MongoConfig = async () => {
     try {
         await mongoose.connect(process.env.MONGO_CNN);

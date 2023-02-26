@@ -6,6 +6,8 @@ const crearPedido = async (req = request, res = response) => {
     const { estado, ...nuevoBody } = req.body
     const pedido = new Pedido(nuevoBody)
     await pedido.save()
+    const fechahoy = new Date('2023-02-23')//armar con el date().year
+    console.log(fechahoy)
     return res.json({
         ok: true,
         msg: `Se creo el pedido satisfactoriamente`,
@@ -32,7 +34,7 @@ const editarEstadoPedido = async (req = request, res = response) => {
     const { id } = req.params
     const { estado } = req.body
     const { usuario } = req.body
-    const pedido = await Pedido.findByIdAndUpdate(id, { estado: estado,usuario:usuario }, { new: true })
+    const pedido = await Pedido.findByIdAndUpdate(id, { estado: estado, usuario: usuario }, { new: true })
     if (!pedido) {
         return res.status(404).json({
             ok: false,
@@ -95,7 +97,7 @@ const editarPagado = async (req = request, res = response) => {
     const { id } = req.params
     const { pagado } = req.body
     const { usuario } = req.body
-    const pedido = await Pedido.findByIdAndUpdate(id, { pagado: pagado,usuario:usuario }, { new: true })
+    const pedido = await Pedido.findByIdAndUpdate(id, { pagado: pagado, usuario: usuario }, { new: true })
     if (!pedido) {
         return res.status(404).json({
             ok: false,
