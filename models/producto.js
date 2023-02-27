@@ -29,6 +29,9 @@ const ProductoSchema = Schema({
     default: []
 
   },
+  fecha:{
+    type:Date
+  },
   descripcion: { type: String, default: 'Sin descripcion' },
   disponible: { type: Boolean, defult: true, required: true },
   img: {

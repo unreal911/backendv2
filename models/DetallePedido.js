@@ -40,9 +40,12 @@ const DetallePedidoSchema = Schema({
         default: 0,
         required: true
     },
-    usuario:{
-        type:String,
-        default:''
+    fecha: {
+        type: Date
+    },
+    usuario: {
+        type: String,
+        default: ''
     }
 });
 

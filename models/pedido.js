@@ -1,5 +1,5 @@
 const { Schema, model, SchemaType } = require('mongoose');
-
+const moment = require('moment-timezone');
 const pedidoSchema = Schema({
     nombre: {
         type: String,
@@ -17,7 +17,6 @@ const pedidoSchema = Schema({
     },
     fecha: {
         type: Date,
-        default: new Date()
     },
     estado: {
         type: String,
@@ -63,6 +62,5 @@ pedidoSchema.methods.toJSON = function () {
     data.uid = _id
     return data;
 }
-
 
 module.exports = model('Pedido', pedidoSchema);

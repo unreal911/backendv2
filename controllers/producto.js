@@ -4,6 +4,9 @@ const Producto = require("../models/producto")
 const crearProducto = async (req = request, res = response) => {
     const { usuario, ...nuevoBody } = req.body
     nuevoBody.usuario = req.usuario._id
+    const now = new Date();
+    const fiveHoursAgo = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+    nuevoBody.fecha=fiveHoursAgo
     const productodb = new Producto(nuevoBody)
     await productodb.save()
     return res.json({
@@ -16,6 +19,9 @@ const editarProducto = async (req = request, res = response) => {
     const { usuario, ...nuevoBody } = req.body
     const { id } = req.params
     nuevoBody.usuario = req.usuario._id
+    const now = new Date();
+    const fiveHoursAgo = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+    nuevoBody.fecha=fiveHoursAgo
     const productodb = await Producto.findByIdAndUpdate(id, nuevoBody, { new: true })
     if (!productodb) {
         return res.status(404).json({

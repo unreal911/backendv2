@@ -13,7 +13,6 @@ const login = async (req = request, res = response) => {
                 msg: `no existe el email ${email} en la base de datos`
             })
         }
-
         const validPassword = bcryptjs.compareSync(password, usuariodb.password);
         if (!validPassword) {
             return res.status(400).json({

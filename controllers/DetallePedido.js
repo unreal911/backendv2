@@ -8,6 +8,9 @@ const crearDetallePedido = async (req = request, res = response) => {
     nuevoBody.precio = producto.precio
     nuevoBody.subtotal = producto.precio * nuevoBody.cantidad
     nuevoBody.nombre = producto.nombre
+    const now = new Date();
+    const fiveHoursAgo = new Date(now.getTime() - (5 * 60 * 60 * 1000));
+    nuevoBody.fecha=fiveHoursAgo
     const Dpedido = new DetallePedido(nuevoBody)
     await Dpedido.save()
     return res.json({
