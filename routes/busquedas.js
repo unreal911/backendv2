@@ -5,14 +5,10 @@
 const { Router } = require('express');
 const { validarJWT } = require('../middlewares/validar-jwt')
 
-const { getTodo, getDocumentosColeccion, getProductoxCategoria, getProductoPublic, getFiltro, MostrarventaSemanaDia } = require('../controllers/busqueda');
+const { getTodo, getDocumentosColeccion, getProductoxCategoria, getProductoPublic, getFiltro, MostrarventaSemanaDia, obtenerUsuariosConPedidos } = require('../controllers/busqueda');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-
-
 const router = Router();
-
-
 router.get('/:busqueda', validarJWT, getTodo);
 
 router.get('/coleccion/:tabla/:busqueda', validarJWT, getDocumentosColeccion);
@@ -29,5 +25,12 @@ router.get('/publico/:tabla', [
     validarCampos
 ], getProductoxCategoria);
 router.post('/filtro', [], getFiltro)
-router.post('/filtroPanel/semana', [], MostrarventaSemanaDia)
+router.post('/filtroPanel/semana', [
+    validarJWT,
+    validarCampos
+], MostrarventaSemanaDia)
+router.get('/filtroTabla/usuarios', [
+    validarJWT,
+    validarCampos
+], obtenerUsuariosConPedidos)
 module.exports = router;

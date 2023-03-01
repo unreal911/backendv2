@@ -64,6 +64,7 @@ router.delete('/:id',
         validarJWT,
         check('id', 'el id no debe de estar vacio').notEmpty(),
         check('id', 'el id debe ser valido').isMongoId(),
+        validarCampos
     ]
     , eliminarPedido)
 module.exports = router

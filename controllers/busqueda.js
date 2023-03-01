@@ -4,6 +4,7 @@ const Producto = require("../models/producto");
 const Categoria = require("../models/categoria");
 const talla = require("../models/talla");
 const pedido = require("../models/pedido");
+const moment = require('moment');
 const getTodo = async (req, res = response) => {
     const busqueda = req.params.busqueda;
     const regex = new RegExp(busqueda, "i");
@@ -170,12 +171,97 @@ const MostrarventaSemanaDia = async (req = request, res = response) => {
         const element = resultados[i];
         arrayRespuesta.push({
             fecha: resultados[i]._id,
-            ventas:resultados[i].ventas
+            ventas: resultados[i].ventas
         })
     }
     console.log(arrayRespuesta)
     return res.json({
-        resultados:arrayRespuesta
+        resultados: arrayRespuesta
+    })
+}
+const obtenerUsuariosConPedidos = async (req = request, res = response) => {
+    const pedidosPorDia = await pedido.aggregate([
+        {
+            $match: {
+                fecha: {
+                    $gte: new Date(moment().startOf('day').toISOString()),
+                    $lt: new Date(moment().endOf('day').toISOString()),
+                },
+            },
+        },
+        {
+            $group: {
+                _id: '$usuario',
+                pedidos: { $sum: 1 },
+            },
+        },
+    ]);
+
+    const pedidosPorSemana = await pedido.aggregate([
+        {
+            $match: {
+                fecha: {
+                    $gte: new Date(moment().startOf('week').toISOString()),
+                    $lt: new Date(moment().endOf('week').toISOString()),
+                },
+            },
+        },
+        {
+            $group: {
+                _id: '$usuario',
+                pedidos: { $sum: 1 },
+            },
+        },
+    ]);
+
+    const pedidosPorMes = await pedido.aggregate([
+        {
+            $match: {
+                fecha: {
+                    $gte: new Date(moment().startOf('month').toISOString()),
+                    $lt: new Date(moment().endOf('month').toISOString()),
+                },
+            },
+        },
+        {
+            $group: {
+                _id: '$usuario',
+                pedidos: { $sum: 1 },
+            },
+        },
+    ]);
+
+    const usuarios = await Usuario.find().select('nombre img uid');
+
+    const usuariosConPedidos = usuarios.map(usuario => {
+        const pedidosHoy = pedidosPorDia.find(pedido => pedido._id.toString() === usuario._id.toString())?.pedidos || 0;
+        const pedidosSemana = pedidosPorSemana.find(pedido => pedido._id.toString() === usuario._id.toString())?.pedidos || 0;
+        const pedidosMes = pedidosPorMes.find(pedido => pedido._id.toString() === usuario._id.toString())?.pedidos || 0;
+        return {
+            uid: usuario._id,
+            img: usuario.img,
+            nombre: usuario.nombre,
+            pedidosHoy,
+            pedidosSemana,
+            pedidosMes,
+        };
+    });
+    res.json({
+        usuariosConPedidos
+    })
+};
+const pedidosxusuario = async (req = request, res = response) => {
+    const { id } = req.body
+    const pedidosuser = await pedido.find({ usuario: id })
+    if (!pedidosuser) {
+        return res.status(404).json({
+            ok: false,
+            msg: `usuario no encontrado`
+        })
+    }
+    return res.json({
+        ok: true,
+        pedidos: pedidosuser
     })
 }
 module.exports = {
@@ -184,5 +270,7 @@ module.exports = {
     getProductoxCategoria,
     getProductoPublic,
     getFiltro,
-    MostrarventaSemanaDia
+    MostrarventaSemanaDia,
+    obtenerUsuariosConPedidos,
+    pedidosxusuario
 };

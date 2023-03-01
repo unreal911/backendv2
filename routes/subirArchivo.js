@@ -14,9 +14,16 @@ router.post('/:coleccion/:id', [
 ], subirArchivo)
 router.post('/:id',
     [
-
+        validarJWT,
+        validarCampos
     ],
     SubirMultiplesArchivos)
-router.delete('/:id', [], eliminarimagen)
-router.put('/:id', [], cambiarPosicion)
+router.delete('/:id', [
+    validarJWT,
+    validarCampos
+], eliminarimagen)
+router.put('/:id', [
+    validarJWT,
+    validarCampos
+], cambiarPosicion)
 module.exports = router

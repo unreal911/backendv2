@@ -6,7 +6,12 @@ const crearPedido = async (req = request, res = response) => {
     const { estado, ...nuevoBody } = req.body
     const now = new Date();
     const fiveHoursAgo = new Date(now.getTime() - (5 * 60 * 60 * 1000));
-    nuevoBody.fecha=fiveHoursAgo
+    nuevoBody.fecha = fiveHoursAgo
+    if (nuevoBody.tipoventa == 'VentaWeb') {
+        nuevoBody.estado = 'NoAtendida'
+    } else {
+        nuevoBody.estado = 'completado'
+    }
     const pedido = new Pedido(nuevoBody)
     console.log(pedido)
     await pedido.save()
@@ -20,7 +25,7 @@ const editarPedido = async (req = request, res = response) => {
     const { id } = req.params
     const now = new Date();
     const fiveHoursAgo = new Date(now.getTime() - (5 * 60 * 60 * 1000));
-    req.body.fecha=fiveHoursAgo
+    req.body.fecha = fiveHoursAgo
     const pedido = await Pedido.findByIdAndUpdate(id, req.body, { new: true })
     if (!pedido) {
         return res.status(404).json({
