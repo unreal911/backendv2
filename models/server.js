@@ -13,10 +13,10 @@ class Server {
             categoria: '/api/categoria',
             producto: '/api/producto',
             busqueda: '/api/busqueda',
-            talla:'/api/talla',
-            pedido:'/api/pedido',
-            detallePedido:'/api/detallepedido',
-            slider:'/api/slider'
+            talla: '/api/talla',
+            pedido: '/api/pedido',
+            detallePedido: '/api/detallepedido',
+            slider: '/api/slider'
         }
         this.mongooseConfig()
         this.middlewares()
@@ -35,6 +35,9 @@ class Server {
             tempFileDir: '/tmp/',
             createParentPath: true
         }));
+        this.app.get('/', (req, res) => {
+            res.sendFile(__dirname + '/../public');
+        });
     }
     routes() {
         this.app.use(this.rutas.usuario, require('../routes/usuario'))
