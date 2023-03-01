@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { MongoConfig } = require('../database/config');
 const fileUpload = require('express-fileupload');
+const path = require('path')
 class Server {
     constructor() {
         this.app = express();
@@ -26,20 +27,23 @@ class Server {
     async mongooseConfig() {
         await MongoConfig()
     }
-    middlewares() {
+    middlewares() {  
+        this.app.use(express.static(__dirname +'/../public'))
         this.app.use(cors())
         this.app.use(express.json())
-        this.app.use(express.static('public'))
+      
         this.app.use(fileUpload({
             useTempFiles: true,
             tempFileDir: '/tmp/',
             createParentPath: true
         }));
-        this.app.get('/', (req, res) => {
-            res.sendFile(__dirname + '/../public');
-        });
+       
     }
     routes() {
+        this.app.get('/', (req, res) => {
+            console.log(path.join(__dirname +'/../public'))
+            res.send('Hola')
+        })
         this.app.use(this.rutas.usuario, require('../routes/usuario'))
         this.app.use(this.rutas.uploads, require('../routes/subirArchivo'))
         this.app.use(this.rutas.auth, require('../routes/auth'))
@@ -50,6 +54,9 @@ class Server {
         this.app.use(this.rutas.pedido, require('../routes/pedido'))
         this.app.use(this.rutas.detallePedido, require('../routes/detallePedido'))
         this.app.use(this.rutas.slider, require('../routes/slider'))
+        this.app.get('*',(req,res)=>{
+            res.sendFile(path.resolve(__dirname,'../public/index.html'))
+        })
     }
     listen() {
         this.app.listen(this.PORT, () => { console.log(`estas en el puerto ${this.PORT}`) })
