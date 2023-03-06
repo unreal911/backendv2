@@ -122,6 +122,9 @@ const getFiltro = async (req = request, res = response) => {
     if (filtro.pagado.$in.length == 0) {
         delete filtro.pagado
     }
+    if (filtro.estado.$in.length == 0) {
+        delete filtro.estado
+    }
     if (filtro.fecha.$gte == '' && filtro.fecha.$lte == '') {
         delete filtro.fecha
     }
